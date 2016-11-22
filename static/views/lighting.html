@@ -1,0 +1,66 @@
+<div class="main">
+    <div class="container">
+        <div class="row">
+            <h3>Relation between consumption and flux</h3>
+        </div>
+        <div class="row">
+            <d3-scatters data="lightings"></d3-scatters>
+        </div>
+        <div class="row">
+            <h4>Table for lighting fixtures</h4>
+        </div>
+        <div class="row">
+            <table class="table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Lamp type</th>
+                        <th>Consumption[W]</th>
+                        <th>Flux[lm]</th>
+                        <th>Efficacy[lm/W]</th>
+                        <th>CRI</th>
+                        <th>Color temperature[K]</th>
+                        <th>Mercury contents[mg]</th>
+                        <th>Manufacturer</th>
+                    </tr>
+                </thead>
+                <tbody  ng-repeat="light in lightings">    
+                    <tr>
+                        <td>{{light.title}}</td>
+                        <td>{{light.lamp_type}}</td>
+                        <td>{{light.wattage}}</td>
+                        <td>{{light.flux}}</td>
+                        <td>{{light.efficacy}}</td>
+                        <td>{{light.cri}}</td>
+                        <td>{{light.color_temp}}</td>
+                        <td>{{light.mercury}}</td>
+                        <td>{{light.manufacturer}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="lighting-list" class="row">
+            <div class="col-sm-8 col-sm-offset-2">
+                <div class="checkbox" ng-repeat="lighting in lightings">
+                    <label>
+                        <input type="checkbox" ng-click="deleteLighting(lighting.id)"> {{ lighting.title }}
+                    </label>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="todo-form" class="row">
+            <div class="col-sm-8 col-sm-offset-2 text-center">
+                <form>
+                    <div class="form-group">
+
+                        <input type="text" class="form-control input-lg text-center" placeholder="Please input lamp type" ng-model="formData.lamp_type">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg" ng-click="createLighting()">Add</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

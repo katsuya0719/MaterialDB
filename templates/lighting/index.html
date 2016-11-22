@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+{% if lighting_list %}
+<div class = "container">
+	<div class = "row"><br>
+		<div class="col-lg-6">
+			interactive graph
+		</div>
+
+		<div class="col-lg-6">
+			interactive graph
+		</div>
+	</div>
+        
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Lamp type</th>
+				<th>Consumption[W]</th>
+				<th>Flux[lm]</th>
+				<th>Efficacy[lm/W]</th>
+				<th>CRI</th>
+				<th>Color temperature[K]</th>
+				<th>Mercury contents[mg]</th>
+				<th>Manufacturer</th>
+			</tr>
+	    </thead>
+
+		<tbody>    
+		{% for light in lighting_list %}
+			<tr>
+				<td>{{light.title}}</td>
+				<td>{{light.lamp_type}}</td>
+				<td>{{light.wattage}}</td>
+				<td>{{light.flux}}</td>
+				<td>{{light.efficacy}}</td>
+				<td>{{light.cri}}</td>
+				<td>{{light.color_temp}}</td>
+				<td>{{light.mercury}}</td>
+				<td>{{light.manufacturer}}</td>
+			</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+
+{% else %}
+	<p>No lights are available.</p>
+{% endif %}
+{% endblock %}

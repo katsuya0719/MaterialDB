@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block content %}
+{% load staticfiles %}
+{% if glass_list %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/glass.css' %}" />
+
+<div class = "container">
+	<div class="row">
+    <h4>Glass performance</h4>
+        <div class="col-md-12" id="glass-scatter">
+        </div>
+        <div class="col-md-12" id="legend">
+        </div>
+    </div>
+	</div>
+        
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Thickness[mm]</th>
+				<th>Tsol</th>
+				<th>Tvis</th>
+				<th>Conductivity</th>
+				<th>Rsol1</th>
+				<th>Rsol2</th>
+				<th>Rvis1</th>
+				<th>Rvis2</th>
+				<th>Emis1</th>
+				<th>Emis2</th>
+				<th>Manufacturer</th>
+			</tr>
+	    </thead>
+
+		<tbody>    
+		{% for glass in glass_list %}
+			<tr>
+				<td>{{glass.title}}</td>
+				<td>{{glass.thickness}}</td>
+				<td>{{glass.tsol}}</td>
+				<td>{{glass.tvis}}</td>
+				<td>{{glass.conductivity}}</td>
+				<td>{{glass.rsol1}}</td>
+				<td>{{glass.rsol2}}</td>
+				<td>{{glass.rvis1}}</td>
+				<td>{{glass.rvis2}}</td>
+				<td>{{glass.emis1}}</td>
+				<td>{{glass.emis2}}</td>
+				<td>{{glass.manufacturer}}</td>
+			</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+
+{% else %}
+	<p>No glass are available.</p>
+{% endif %}
+</div>
+<script src="{% static 'vendor/js/d3_v4.js' %}"></script>
+<script src="{% static 'js/glassScatter.js' %}"></script>
+<script src="{% static 'vendor/js/jquery-2.2.3.min.js' %}"></script>
+
+<script type="text/javascript">
+    createGraph("{% static 'csv/glass.csv' %}");
+</script>
+{% endblock %}
