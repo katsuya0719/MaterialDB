@@ -7,4 +7,6 @@ urlpatterns = [
     url(r'^$', views.IndexView.as_view(), name='index'),
 ]
 router = routers.DefaultRouter(trailing_slash=False)
-router.register(r'lighting/', views.LightingViewSet)
+router.register(r'api/', views.LightingViewSet)
+
+urlpatterns += router.urls

@@ -9,4 +9,6 @@ urlpatterns = [
     #url(r'^upload/', csvUpload.as_view(), name='csv_upload'),
 ]
 router = routers.DefaultRouter(trailing_slash=False)
-router.register(r'glass/', views.GlassViewSet)
+router.register(r'api/', views.GlassViewSet)
+
+urlpatterns += router.urls

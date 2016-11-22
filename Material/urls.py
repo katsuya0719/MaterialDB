@@ -23,6 +23,6 @@ urlpatterns = [
 	url(r'^lighting/', include('Lighting.urls')),
 	url(r'^envelope/', include('Envelope.urls')),
     url(r'^admin/', admin.site.urls),
-    url(r'^api/', include(router.urls)),
+    #url(r'^api/', include(router.urls)),
     #url('', RedirectView.as_view(url='/static/index.html')),
 ]

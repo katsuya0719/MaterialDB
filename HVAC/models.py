@@ -7,9 +7,11 @@ class BasicInfo(models.Model):
 	title = models.CharField(max_length=50)
 	manufacturer = models.CharField(max_length=50, blank = True)
 	used_project = models.CharField(max_length=50, blank = True)
+	cost=models.IntegerField(null = True)
 
 
 class Chiller(BasicInfo):
-	Capacity = models.IntegerField()
+	Capacity = models.IntegerField(blank = True)
+
 
 
