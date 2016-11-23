@@ -11,6 +11,8 @@ var data = "x,y,z\n" +
     "8,8,12\n";
 
 function readapi(data){
+    var chart1 = dc.scatterPlot("#test1");
+	var chart2 = dc.scatterPlot("#test2");
     console.log(data);
     var data = d3.csv.parse(data);
     data.forEach(function (x) {
