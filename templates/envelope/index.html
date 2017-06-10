@@ -36,16 +36,16 @@
 		{% for glass in glass_list %}
 			<tr>
 				<td>{{glass.title}}</td>
-				<td>{{glass.thickness}}</td>
-				<td>{{glass.tsol}}</td>
-				<td>{{glass.tvis}}</td>
-				<td>{{glass.conductivity}}</td>
-				<td>{{glass.rsol1}}</td>
-				<td>{{glass.rsol2}}</td>
-				<td>{{glass.rvis1}}</td>
-				<td>{{glass.rvis2}}</td>
-				<td>{{glass.emis1}}</td>
-				<td>{{glass.emis2}}</td>
+				<td>{{glass.thickness|floatformat:2}}</td>
+				<td>{{glass.tsol|floatformat:2}}</td>
+				<td>{{glass.tvis|floatformat:2}}</td>
+				<td>{{glass.conductivity|floatformat:2}}</td>
+				<td>{{glass.rsol1|floatformat:2}}</td>
+				<td>{{glass.rsol2|floatformat:2}}</td>
+				<td>{{glass.rvis1|floatformat:2}}</td>
+				<td>{{glass.rvis2|floatformat:2}}</td>
+				<td>{{glass.emis1|floatformat:2}}</td>
+				<td>{{glass.emis2|floatformat:2}}</td>
 				<td>{{glass.manufacturer}}</td>
 			</tr>
 		{% endfor %}
