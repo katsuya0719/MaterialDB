@@ -4,7 +4,16 @@
 {% if glass_list %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/glass.css' %}" />
 
-<div class = "container">
+	<div class="navbar navbar-inverse" role="navigation">
+		<div class="navbar-inner">
+			<ul class="nav navbar-nav">
+				<li><a href="{% url 'envelope:index' %}">Glazing</a></li>
+				<li><a href="{% url 'lighting:index' %}">Insulation</a></li>
+				<li><a href="{% url 'lighting:index' %}">Shading</a></li>
+			</ul>
+		</div>
+	</div>
+
 	<div class="row">
     <h4>Glass performance</h4>
         <div class="col-md-12" id="glass-scatter">
@@ -12,7 +21,6 @@
         <div class="col-md-12" id="legend">
         </div>
     </div>
-	</div>
         
 	<table class="table table-bordered">
 		<thead>
@@ -55,7 +63,7 @@
 {% else %}
 	<p>No glass are available.</p>
 {% endif %}
-</div>
+
 <script src="{% static 'vendor/js/d3_v4.js' %}"></script>
 <script src="{% static 'js/glassScatter.js' %}"></script>
 <script src="{% static 'vendor/js/jquery-2.2.3.min.js' %}"></script>

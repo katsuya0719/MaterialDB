@@ -20,3 +20,13 @@ class Glass(BasicInfo):
 
 	def __str__(self):
 		return self.title
+
+class Thickness(models.Model):
+	thick=models.FloatField()
+
+class Insulation(BasicInfo):
+	conductivity = models.FloatField(blank=True)
+	lcc=models.FloatField(blank=True)
+	thickness=models.ManyToManyField(Thickness,blank=True)
+
+
