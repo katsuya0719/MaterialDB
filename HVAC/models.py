@@ -12,18 +12,26 @@ class BasicInfo(models.Model):
 	comment=models.TextField(blank=True)
 	created_at = models.DateTimeField(auto_now_add=True)
 
+class VRV(BasicInfo):
+	InletT = models.FloatField(blank=True)
+	OutletT = models.FloatField(blank=True)
+	Capacity = models.IntegerField(blank=True)  # Reference capacity
+	COP = models.FloatField(blank=True)  # Reference COP
 
-class Chiller(BasicInfo):
+class Chiller(VRV):
 	CONDENSER_CHOICES = (
 		('WaterCooled','WaterCooled'),
 		('AirCooled', 'AirCooled'),
 		('EvaporativelyCooled','EvaporativelyCooled')
 	)
 	Condenser=models.CharField(max_length=15,choices=CONDENSER_CHOICES,default='Water')
-	InletT = models.FloatField(blank=True)
-	OutletT = models.FloatField(blank=True)
-	Capacity = models.IntegerField(blank = True) #Reference capacity
-	COP=models.FloatField(blank=True) #Reference COP
+
+class HeatExchanger(BasicInfo):
+	Efficiency=models.IntegerField(blank=True)
+	AirVolume=models.IntegerField(blank=True)
+	Noise=models.IntegerField(blank=True)
+	Consumption=models.IntegerField(blank=True)
+
 
 
 
