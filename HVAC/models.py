@@ -32,6 +32,17 @@ class HeatExchanger(BasicInfo):
 	Noise=models.IntegerField(blank=True)
 	Consumption=models.IntegerField(blank=True)
 
+class FCU(BasicInfo):
+	AirVolume=models.IntegerField(blank=True)
+	SensibleCoolCap=models.IntegerField(blank=True)
+	LatentCoolCap = models.IntegerField(blank=True)
+	HeatCap=models.IntegerField(blank=True)
+	WaterFlow=models.IntegerField(blank=True)
+	Noise=models.IntegerField(blank=True)
+
+class WaterPump(BasicInfo):
+
+
 
 
 
