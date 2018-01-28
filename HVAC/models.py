@@ -52,7 +52,11 @@ class EIRofPLR(models.Model):
 	def __str__(self):
 		return self.name
 
-class Chiller(VRV):
+class Chiller(BasicInfo):
+	capacity = models.IntegerField(blank=True)  # Reference capacity
+	cop = models.FloatField(blank=True)  # Reference COP
+	chwtemp=models.FloatField(blank=True)
+	cwtemp = models.FloatField(blank=True)
 	CONDENSER_CHOICES = (
 		('WaterCooled','WaterCooled'),
 		('AirCooled', 'AirCooled'),
