@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block content %}
+{% if chiller_list %}
+<link rel="stylesheet" type="text/css" href="{% static 'vendor/css/bootstrap.min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'vendor/css/dc.css' %}" />
+
+<div class = "container">
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Capacity[kW]</th>
+				<th>Reference COP</th>
+				<th>Leaving Chilled Water Temp[C]</th>
+				<th>Entering Condenser Fluid Temp[C]</th>
+				<th>Condenser Type</th>
+				<th>Cost[HKD]</th>
+				<th>Manufacturer</th>
+			</tr>
+	    </thead>
+
+		<tbody>    
+		{% for chiller in chiller_list %}
+			<tr>
+				<td><a href="{% url 'hvac:detail' chiller.pk %}">{{chiller.title}}</td>
+				<td>{{chiller.capacity|floatformat:"0"}}</td>
+				<td>{{chiller.cop}}</td>
+				<td>{{chiller.chwtemp}}</td>
+				<td>{{chiller.cwtemp}}</td>
+				<td>{{chiller.condenser}}</td>
+				<td>{{chiller.cost}}</td>
+				<td>{{chiller.manufacturer}}</td>
+			</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+
+{% else %}
+	<p>No chillers are available.</p>
+{% endif %}
+</div>
+<script src="{% static 'vendor/js/d3.js' %}"></script>
+<script src="{% static 'vendor/js/dc.js' %}"></script>
+<script src="{% static 'vendor/js/jquery-2.2.3.min.js' %}"></script>
+
+<script type="text/javascript">
+</script>
+{% endblock %}

@@ -29,10 +29,10 @@ class CapacityFunction(models.Model):
 	c4 = models.FloatField()
 	c5 = models.FloatField()
 	c6 = models.FloatField()
-	minX= models.FloatField(blank=True)
-	maxX = models.FloatField(blank=True)
-	minY = models.FloatField(blank=True)
-	maxY = models.FloatField(blank=True)
+	min_x= models.FloatField(blank=True)
+	max_x = models.FloatField(blank=True)
+	min_y = models.FloatField(blank=True)
+	max_y = models.FloatField(blank=True)
 
 	def __str__(self):
 		return self.name
@@ -46,8 +46,8 @@ class EIRofPLR(models.Model):
 	c2= models.FloatField()
 	c3 = models.FloatField()
 	c4 = models.FloatField(blank=True,null=True)
-	minX = models.FloatField(blank=True)
-	maxX = models.FloatField(blank=True)
+	min_x = models.FloatField(blank=True)
+	max_x = models.FloatField(blank=True)
 
 	def __str__(self):
 		return self.name
@@ -62,16 +62,16 @@ class Chiller(BasicInfo):
 		('AirCooled', 'AirCooled'),
 		('EvaporativelyCooled','EvaporativelyCooled')
 	)
-	Condenser=models.CharField(max_length=15,choices=CONDENSER_CHOICES,default='Water')
+	condenser=models.CharField(max_length=15,choices=CONDENSER_CHOICES,default='Water')
 	CHWFlowRate=models.FloatField(blank=True,null=True)
 	CWFlowRate=models.FloatField(blank=True,null=True)
-	minPLR=models.FloatField(blank=True,null=True)
-	maxPLR=models.FloatField(blank=True,null=True)
-	optimumPLR=models.FloatField(blank=True,null=True)
+	minplr=models.FloatField(blank=True,null=True)
+	maxplr=models.FloatField(blank=True,null=True)
+	optimumplr=models.FloatField(blank=True,null=True)
 	minUnloadRatio=models.FloatField(blank=True,null=True)
-	CapacityFunction=models.OneToOneField(CapacityFunction,blank=True,null=True,on_delete=models.CASCADE,related_name='cap')
-	EIRofTemp=models.OneToOneField(EIRofTemp,blank=True,null=True,on_delete=models.CASCADE,related_name='eirtemp')
-	EIRofPLR = models.OneToOneField(EIRofPLR, blank=True,null=True, on_delete=models.CASCADE,related_name='eirplr')
+	capfunc=models.OneToOneField(CapacityFunction,blank=True,null=True,on_delete=models.CASCADE,related_name='cap')
+	eiroftemp=models.OneToOneField(EIRofTemp,blank=True,null=True,on_delete=models.CASCADE,related_name='eirtemp')
+	eirofplr = models.OneToOneField(EIRofPLR, blank=True,null=True, on_delete=models.CASCADE,related_name='eirplr')
 
 class HeatExchanger(BasicInfo):
 	Efficiency=models.IntegerField(blank=True)
