@@ -22,6 +22,7 @@ from django.views.generic import RedirectView
 urlpatterns = [
 	url(r'^lighting/', include('Lighting.urls')),
 	url(r'^envelope/', include('Envelope.urls')),
+	url(r'^hvac/', include('HVAC.urls')),
     url(r'^admin/', admin.site.urls),
     #url(r'^api/', include(router.urls)),
     #url('', RedirectView.as_view(url='/static/index.html')),
