@@ -3,11 +3,13 @@ from eppy.modeleditor import IDF
 #from .chiller import visBiquadratic,visQuadratic
 import json
 from collections import OrderedDict
+import os
+from django.conf import settings
 
 class parseIDF():
     def __init__(self,idf):
         #idd="data/EP/idd/Energy+V7_2_0.idd"
-        idd = "data/EP/idd/Energy+V8_7_0.idd"
+        idd = settings.BASE_DIR.replace("\\", "/")+"/libs/EPprocessing/idd/Energy+V8_7_0.idd"
         IDF.setiddname(idd)
         self.idf = IDF(idf)
 
