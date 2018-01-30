@@ -13,10 +13,10 @@ class ChillerList(ListView):
 
 class ChillerDetail(DetailView):
     template_name = 'hvac/chiller_detail.html'
-    model = Chiller
+    #model = Chiller
 
     def plot_capfunc(self,context):
-        temp=context['object'].capfunc
+        temp=context['object'].CapacityFunction
         print (temp.c1)
         xrange=[temp.min_x,temp.max_x]
         yrange = [temp.min_y, temp.max_y]
@@ -64,7 +64,7 @@ def parse(idf):
     quadratic = parsed.readattrs(2, attrquad)
     for c in chillers:
         print (c[0])
-        
+
         chiller_db=Chiller(title=c[0],capacity=int(c[1]),cop=float(c[2]),chwtemp=float(c[3]),conwtemp=float(c[4]),chwfr=float(c[5]),conwfr=float(c[6]),minplr=float(c[10]),maxplr=float(c[11]),optimumplr=float(c[12]),minunloadratio=float(c[13]),condenser=c[14],flowmode=c[15])
         chiller_db.save()
         capfunc=c[7]
