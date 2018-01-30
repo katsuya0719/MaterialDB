@@ -9,8 +9,10 @@ from django.conf import settings
 class parseIDF():
     def __init__(self,idf):
         #idd="data/EP/idd/Energy+V7_2_0.idd"
-        idd = settings.BASE_DIR.replace("\\", "/")+"/libs/EPprocessing/idd/Energy+V8_7_0.idd"
+        idd = settings.BASE_DIR.replace("\\", "/")+"/libs/EPprocessing/idd/Energy+V8_8_0.idd"
+        idf=settings.BASE_DIR.replace("\\", "/")+"/libs/EPprocessing/idf/Chillers.idf"
         IDF.setiddname(idd)
+        print (idf)
         self.idf = IDF(idf)
 
     def readidf(self,dict):

@@ -21,7 +21,35 @@ class VRV(BasicInfo):
 	Capacity = models.IntegerField(blank=True)  # Reference capacity
 	COP = models.FloatField(blank=True)  # Reference COP
 
+class Chiller(BasicInfo):
+	capacity = models.IntegerField(blank=True)  # Reference capacity
+	cop = models.FloatField(blank=True)  # Reference COP
+	chwtemp=models.FloatField(blank=True)
+	conwtemp = models.FloatField(blank=True)
+	chwfr=models.FloatField(blank=True,null=True)
+	conwfr=models.FloatField(blank=True,null=True)
+	#capfunc=models.OneToOneField(CapacityFunction,blank=True,null=True,on_delete=models.CASCADE,related_name='cap')
+	#eiroftemp=models.OneToOneField(EIRofTemp,blank=True,null=True,on_delete=models.CASCADE,related_name='eirtemp')
+	#eirofplr = models.OneToOneField(EIRofPLR, blank=True,null=True, on_delete=models.CASCADE,related_name='eirplr')
+	minplr=models.FloatField(blank=True,null=True)
+	maxplr=models.FloatField(blank=True,null=True)
+	optimumplr=models.FloatField(blank=True,null=True)
+	minunloadratio=models.FloatField(blank=True,null=True)
+	CONDENSER_CHOICES = (
+		('WaterCooled','WaterCooled'),
+		('AirCooled', 'AirCooled'),
+		('EvaporativelyCooled','EvaporativelyCooled')
+	)
+	condenser=models.CharField(max_length=15,choices=CONDENSER_CHOICES,default='WaterCooled')
+	FLOWMODE_CHOICES = (
+		('ConstantFlow','ConstantFlow'),
+		('NotModulated', 'NotModulated'),
+		('LeavingSetpointModulated','LeavingSetpointModulated')
+	)
+	flowmode=models.CharField(max_length=50,choices=FLOWMODE_CHOICES,default='ConstantFlow')
+
 class CapacityFunction(models.Model):
+	chiller=models.ForeignKey(Chiller)
 	name=models.CharField(max_length=100, blank = True)
 	c1=models.FloatField()
 	c2=models.FloatField()
@@ -41,6 +69,7 @@ class EIRofTemp(CapacityFunction):
 	pass
 
 class EIRofPLR(models.Model):
+	chiller = models.ForeignKey(Chiller)
 	name = models.CharField(max_length=100, blank=True)
 	c1=models.FloatField()
 	c2= models.FloatField()
@@ -51,27 +80,6 @@ class EIRofPLR(models.Model):
 
 	def __str__(self):
 		return self.name
-
-class Chiller(BasicInfo):
-	capacity = models.IntegerField(blank=True)  # Reference capacity
-	cop = models.FloatField(blank=True)  # Reference COP
-	chwtemp=models.FloatField(blank=True)
-	cwtemp = models.FloatField(blank=True)
-	CONDENSER_CHOICES = (
-		('WaterCooled','WaterCooled'),
-		('AirCooled', 'AirCooled'),
-		('EvaporativelyCooled','EvaporativelyCooled')
-	)
-	condenser=models.CharField(max_length=15,choices=CONDENSER_CHOICES,default='Water')
-	CHWFlowRate=models.FloatField(blank=True,null=True)
-	CWFlowRate=models.FloatField(blank=True,null=True)
-	minplr=models.FloatField(blank=True,null=True)
-	maxplr=models.FloatField(blank=True,null=True)
-	optimumplr=models.FloatField(blank=True,null=True)
-	minUnloadRatio=models.FloatField(blank=True,null=True)
-	capfunc=models.OneToOneField(CapacityFunction,blank=True,null=True,on_delete=models.CASCADE,related_name='cap')
-	eiroftemp=models.OneToOneField(EIRofTemp,blank=True,null=True,on_delete=models.CASCADE,related_name='eirtemp')
-	eirofplr = models.OneToOneField(EIRofPLR, blank=True,null=True, on_delete=models.CASCADE,related_name='eirplr')
 
 class HeatExchanger(BasicInfo):
 	Efficiency=models.IntegerField(blank=True)
