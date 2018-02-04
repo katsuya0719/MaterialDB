@@ -49,7 +49,7 @@ class Chiller(BasicInfo):
 	flowmode=models.CharField(max_length=50,choices=FLOWMODE_CHOICES,default='ConstantFlow')
 
 class CapacityFunction(models.Model):
-	chiller=models.ForeignKey(Chiller)
+	chiller=models.ForeignKey(Chiller,related_name='cap')
 	name=models.CharField(max_length=100, blank = True)
 	c1=models.FloatField()
 	c2=models.FloatField()
@@ -65,11 +65,25 @@ class CapacityFunction(models.Model):
 	def __str__(self):
 		return self.name
 
-class EIRofTemp(CapacityFunction):
-	pass
+class EIRofTemp(models.Model):
+	base_chiller = models.ForeignKey(Chiller, related_name='eirtemp')
+	name = models.CharField(max_length=100, blank=True)
+	c1 = models.FloatField()
+	c2 = models.FloatField()
+	c3 = models.FloatField()
+	c4 = models.FloatField()
+	c5 = models.FloatField()
+	c6 = models.FloatField()
+	min_x = models.FloatField(blank=True)
+	max_x = models.FloatField(blank=True)
+	min_y = models.FloatField(blank=True)
+	max_y = models.FloatField(blank=True)
+
+	def __str__(self):
+		return self.name
 
 class EIRofPLR(models.Model):
-	chiller = models.ForeignKey(Chiller)
+	chiller = models.ForeignKey(Chiller,related_name='eirplr')
 	name = models.CharField(max_length=100, blank=True)
 	c1=models.FloatField()
 	c2= models.FloatField()
