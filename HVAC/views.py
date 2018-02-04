@@ -13,10 +13,12 @@ class ChillerList(ListView):
 
 class ChillerDetail(DetailView):
     template_name = 'hvac/chiller_detail.html'
-    #model = Chiller
+    model = Chiller
 
     def plot_capfunc(self,context):
-        temp=context['object'].CapacityFunction
+        temp=context['object'].cap
+        print (temp)
+        print (context['object'].cop)
         print (temp.c1)
         xrange=[temp.min_x,temp.max_x]
         yrange = [temp.min_y, temp.max_y]
