@@ -66,7 +66,7 @@ class CapacityFunction(models.Model):
 		return self.name
 
 class EIRofTemp(models.Model):
-	base_chiller = models.ForeignKey(Chiller, related_name='eirtemp')
+	chiller = models.ForeignKey(Chiller, related_name='eirtemp')
 	name = models.CharField(max_length=100, blank=True)
 	c1 = models.FloatField()
 	c2 = models.FloatField()
