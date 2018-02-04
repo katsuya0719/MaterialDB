@@ -43,7 +43,9 @@ def visBiquadratic(xr,yr,gsize,cL,xl,yl,ti,type=None,coef=1):
 
     fig.colorbar(surf, shrink=0.5, aspect=5)
 
-    plt.show()
+    #plt.show()
+    return plt
+
 
 def visQuadratic(xr,gsize,cL,xl,yl,ti):
     fig = plt.figure()
@@ -54,7 +56,9 @@ def visQuadratic(xr,gsize,cL,xl,yl,ti):
     ax.set_xlabel(xl)
     ax.set_ylabel(yl)
     ax.set_title(ti)
-    plt.show()
+
+    #plt.show()
+    return plt
 
 if __name__ == '__main__':
     #xrange=[5,10]

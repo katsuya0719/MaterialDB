@@ -1,9 +1,12 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 from django.views.generic import ListView,DetailView
 from .models import Chiller,CapacityFunction,EIRofTemp,EIRofPLR
 from libs.EPprocessing import chiller
 from libs.EPprocessing.parseidf import parseIDF
 from django.core.files.storage import FileSystemStorage
+import matplotlib as mpl
+mpl.use('Agg')
 # Create your views here.
 
 class ChillerList(ListView):
@@ -16,10 +19,10 @@ class ChillerDetail(DetailView):
     model = Chiller
 
     def plot_capfunc(self,context):
-        temp=context['object'].cap
+        temp=context['object'].capacityfunction
         print (temp)
         print (context['object'].cop)
-        print (temp.c1)
+        #print (temp.c1)
         xrange=[temp.min_x,temp.max_x]
         yrange = [temp.min_y, temp.max_y]
         gsize=0.1
@@ -28,13 +31,18 @@ class ChillerDetail(DetailView):
         ylabel = "Condenser Fluid Entering Temp[C]"
         title = "Capacity Function of Temperature"
         #need to solve signal problem first
-        #chiller.visBiquadratic(xrange, yrange, gsize, cList, xlabel, ylabel, title)
+        plt=chiller.visBiquadratic(xrange, yrange, gsize, cList, xlabel, ylabel, title)
+        response=HttpResponse(content_type="image/jpeg")
+        plt.savefig(response,format="png")
+        return response
 
 
     #implement logic to visualize
     def get_context_data(self, **kwargs):
         context=super().get_context_data()
-        self.plot_capfunc(context)
+        context["cap"]=self.plot_capfunc(context)
+
+        return context
 
 def idf_import(request):
     if request.method == 'POST' and request.FILES['myfile']:
