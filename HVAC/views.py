@@ -5,6 +5,8 @@ from .models import Chiller,CapacityFunction,EIRofTemp,EIRofPLR
 from libs.EPprocessing import chiller
 from libs.EPprocessing.parseidf import parseIDF
 from django.core.files.storage import FileSystemStorage
+from django.core.files.images import ImageFile
+from io import BytesIO
 import matplotlib as mpl
 mpl.use('Agg')
 # Create your views here.
@@ -32,9 +34,12 @@ class ChillerDetail(DetailView):
         title = "Capacity Function of Temperature"
         #need to solve signal problem first
         plt=chiller.visBiquadratic(xrange, yrange, gsize, cList, xlabel, ylabel, title)
-        response=HttpResponse(content_type="image/jpeg")
-        plt.savefig(response,format="png")
-        return response
+        #response=HttpResponse(content_type="image/jpeg")
+        figure=BytesIO()
+        plt.savefig(figure,format="png")
+        content_file=ImageFile(figure)
+        print (content_file)
+        return content_file
 
 
     #implement logic to visualize
@@ -43,6 +48,10 @@ class ChillerDetail(DetailView):
         context["cap"]=self.plot_capfunc(context)
 
         return context
+
+def heatmap(request):
+    
+
 
 def idf_import(request):
     if request.method == 'POST' and request.FILES['myfile']:
