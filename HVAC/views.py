@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render,render_to_response
 from django.http import HttpResponse
-from django.views.generic import ListView,DetailView
+from django.views.generic import ListView,DetailView,TemplateView
 from .models import Chiller,CapacityFunction,EIRofTemp,EIRofPLR
 from libs.EPprocessing import chiller
 from libs.EPprocessing.parseidf import parseIDF
@@ -8,8 +8,49 @@ from django.core.files.storage import FileSystemStorage
 from django.core.files.images import ImageFile
 from io import BytesIO
 import matplotlib as mpl
-mpl.use('Agg')
+from bokeh.plotting import figure, output_file, show
+from bokeh.embed import components
+import plotly
+plotly.tools.set_credentials_file(username='obakatsu', api_key='nK5JWwdD7LGUH5lx1wkz')
+import plotly.offline as opy
+import plotly.graph_objs as go
+from rest_framework.views import APIView
+from rest_framework.response import Response
 # Create your views here.
+
+def Graph(request):
+    if request.method == "GET":
+        return render_to_response('hvac/graph.html')
+
+class ChartData(APIView):
+    # you can these two variables down the road to enhance security, but for now just leave them blank
+    authentication_classes = []
+    permission_classes = []
+
+    def get(self, request, format=None):
+        capacity = []
+        cop = []
+        water=0
+        air=0
+        evaporate=0
+        for c in Chiller.objects.all():
+            capacity.append(c.capacity)
+            cop.append(c.cop)
+            if c.condenser=="WaterCooled":
+                water+=1
+            elif c.condenser=="AirCooled":
+                air+=1
+            else:
+                evaporate+=1
+                
+        print (water,air,evaporate)
+
+        data = {
+            "capacity": capacity,
+            "cop": cop,
+        }
+
+        return Response(data)
 
 class ChillerList(ListView):
     template_name = 'hvac/chiller_list.html'
@@ -50,7 +91,26 @@ class ChillerDetail(DetailView):
         return context
 
 def heatmap(request):
-    
+    if request.method == "GET":
+        return render_to_response('hvac/heatmap.html')
+
+    elif request.method == "POST":
+        domain = request.POST['domain'].split()
+        eqn = request.POST['equation']
+        domain = range(int(domain[0]), int(domain[1]))
+        y = [eval(eqn) for x in domain]
+        title = 'y = ' + eqn
+
+        plot = figure(title=title, x_axis_label='X-Axis', y_axis_label='Y- Axis', plot_width=400, plot_height=400)
+        plot.line(domain, y, legend='f(x)', line_width=2)
+        script, div = components(plot)
+        print (plot)
+
+        return render_to_response('hvac/heatmap.html', {'script': script, 'div': div})
+
+
+    else:
+        pass
 
 
 def idf_import(request):

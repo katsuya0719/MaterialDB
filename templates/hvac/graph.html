@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+<body>
+    <div class="content container">
+        <div class="row">
+            <div id="scatter" style="width:1100px;height:800px;"></div>
+        </div>
+    </div>
+</body>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="{% static 'js/plotly.js' %}"></script>
+<script>
+        $(document).ready(function(){
+             plotly()
+        })
+</script>
+{% endblock %}
+
+
