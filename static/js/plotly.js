@@ -10,10 +10,8 @@ function plotly(){
             });
             copData = data.cop;
             idData = data.id;
-            //console.log(idData);
             scatterChart()
-            //transcriptChart()
-        // console.log(data)
+            //test()
         },
         error: function(error_data){
             console.log("error")
@@ -22,7 +20,7 @@ function plotly(){
     })
 
     function scatterChart(){
-        d3=Plotly.d3;
+        
         var data = [{
             x: capacityData,
             y: copData,
@@ -61,50 +59,125 @@ function plotly(){
         var hoverInfo=document.getElementById('hoverInfo');
 
         //add callback
-        /*
-        plot.on('plotly_click', function(data){
-            var pts = '';
-            for(var i=0; i < data.points.length; i++){
-
-                pts = 'x = '+data.points[i].x +'\ny = '+
-                    data.points[i].y.toPrecision(4) + '\nid='+idData[i]+'\n\n';
-            }
-            alert('Closest point clicked:\n\n'+pts);
-        });
-        */
         plot.on('plotly_hover', function(data){
             var infotext = data.points.map(function(d){
-                console.log(d);
               return (d.data.name[d.pointIndex]+'/Capacity= '+d.x+'kW, COP= '+d.y.toPrecision(3));
             });
-            console.log(infotext)
             hoverInfo.innerHTML = infotext.join('');
         })
          .on('plotly_unhover', function(data){
             hoverInfo.innerHTML = '';
         });
-    }
-
-    function articleChart(){
-        var data = [{
-            x: articleData,
-            y: articleLabels,
-            type: 'bar',
-            orientation: 'h',
-            marker: {
-                color: '#23b7e5',
-            },
-        }];
-        var layout = {
-            title: 'Number of Articles per Company',
-            titlefont: {
-                family: 'Droid Sans Mono',
-                size: 36,
-                color: '#000000'
-            },
-            margin: {l:200},
-        };
-
-        Plotly.newPlot('articles', data, layout);
+        plot.on('plotly_click', function(data){
+            var url = data.points.map(function(d){
+                return '/hvac/api/'+d.data.name[d.pointIndex]
+            })
+            scatter3d(url)
+        });
     }
 }
+
+function scatter3d(url){
+    console.log("3d")
+    $.ajax({
+        method: "GET",
+        url: url,
+        success: function(data){
+            console.log(data);
+            //X = np.arange(xr[0], xr[1], gsize)
+            //capacity function
+            var cap=biquadratic(data.cap)
+            //var eirplr=biquadratic(data.eirplr)
+            render(cap,'cap','Cooling Capacity Function')
+            //copData = data.cop;
+        },
+        error: function(error_data){
+            console.log("error")
+            console.log(error_data)
+        },
+    })
+
+    function biquadratic(d){
+        console.log(d)
+        var X=_.range(Math.floor(d.min_x), Math.ceil(d.max_x), 1);
+        var Y=_.range(Math.floor(d.min_y), Math.ceil(d.max_y), 1);
+        var xList=[];
+        var yList=[];
+        var zList=[];
+
+        X.forEach(function(x){
+            Y.forEach(function(y){
+                console.log(x,y)
+                xList.push(x)
+                yList.push(y)
+                var z=d.c1+d.c2*x+d.c3*Math.pow(x,2)+d.c4*y+d.c5*Math.pow(y,2)+d.c6*x*y
+                console.log(z)
+                zList.push(z)
+            })
+        })
+        return [xList,yList,zList]
+    }
+
+    function render(data,id,title){
+        console.log(data[2])
+        var zmax=Math.max.apply(null,data[2]).toFixed(1)
+        console.log(zmax)
+        var trace1 = {
+            x:data[0], y: data[1], z: data[2],
+            colorscale: [
+              [0, 'rgb(255, 0, 0)'],
+              [zmax/2, 'rgb(0, 255, 0)'],
+              [zmax, 'rgb(0, 0, 255)']
+            ],
+            type: 'mesh3d'
+        };
+
+        var data = [trace1];
+        var layout = {
+            margin: {
+            l: 0,
+            r: 0,
+            b: 0,
+            t: 0
+          },
+          title:title
+        };
+        Plotly.newPlot(id, data, layout);
+    };
+
+    
+}
+
+function test(){
+        Plotly.d3.csv('https://raw.githubusercontent.com/plotly/datasets/master/api_docs/mt_bruno_elevation.csv', function(err, rows){
+        function unpack(rows, key) {
+          return rows.map(function(row) { return row[key]; });
+        }
+          
+        var z_data=[ ]
+        for(i=0;i<24;i++)
+        {
+          z_data.push(unpack(rows,i));
+        }
+
+        console.log(z_data)
+        var data = [{
+                   z: z_data,
+                   type: 'surface'
+                }];
+          
+        var layout = {
+          title: 'Mt Bruno Elevation',
+          autosize: false,
+          width: 500,
+          height: 500,
+          margin: {
+            l: 65,
+            r: 50,
+            b: 65,
+            t: 90,
+          }
+        };
+        Plotly.newPlot('myDiv', data, layout);
+        });
+    }

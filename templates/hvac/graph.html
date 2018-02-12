@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
-
+<link rel="stylesheet" type="text/css" href="{% static 'css/graph.css' %}" />
 {% block content %}
 <body>
     <div class="content container">
@@ -11,20 +11,17 @@
             <div id='hoverInfo'></div>
         </div>
         <div class="row">
-            <div class="col-md-4" id="cap">
-
-            </div>
-            <div class="col-md-4" id="eirtemp">
-
-            </div>
-            <div class="col-md-4" id="eirplr">
-
-            </div>
+            <div id="cap" style="width:1100px;height:500px;"></div>
+		</div>
+        <div class="row">
+            <div class="col-md-4" id="eirtemp"></div>
+            <div class="col-md-4" id="eirplr"></div>
 		</div>
     </div>
 </body>
 
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.5/lodash.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="{% static 'js/plotly.js' %}"></script>
 <script>

@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^heatmap/$',heatmap, name='heatmap'),
     url(r'^graph/$',Graph, name='graph'),
     url(r'^api/chart/data/$', ChartData.as_view(), name='api-chart-data'),
-    url(r'^(?P<pk>\d+)/$',ChillerDetail.as_view(), name='detail'),
+    url(r'^api/(?P<pk>\d+)/$',ChillerDetail.as_view(), name='api-detail'),
+    #url(r'^(?P<pk>\d+)/$',ChillerDetail.as_view(), name='detail'),
     url(r'^import/$', idf_import, name='import'),
 ]

@@ -4,24 +4,23 @@ from .models import Chiller,CapacityFunction,EIRofTemp,EIRofPLR
 class CapSerializer(serializers.ModelSerializer):
     class Meta:
         model=CapacityFunction
-        fields = ('c1','c2','c3')
+        exclude = ('chiller','name')
 
 class EIRTSerializer(serializers.ModelSerializer):
     class Meta:
         model=EIRofTemp
-        fields = ('c1','c2','c3')
+        exclude = ('chiller', 'name')
 
 class PLRSerializer(serializers.ModelSerializer):
     class Meta:
         model=EIRofPLR
-        fields = ('c1','c2','c3')
+        exclude = ('chiller', 'name')
 
 class ChillerSerializer(serializers.ModelSerializer):
-    #cap=CapSerializer(read_only=True)
-    #eirtemp=EIRTSerializer(read_only=True)
-    #eirplr = PLRSerializer(read_only=True)
-    cap = serializers.PrimaryKeyRelatedField(read_only=True)
+    cap=CapSerializer(read_only=True)
+    eirtemp=EIRTSerializer(read_only=True)
+    eirplr = PLRSerializer(read_only=True)
 
     class Meta:
         model=Chiller
-        fields=('capacity','cop','chwtemp','conwtemp','cap')
+        fields=('capacity','cop','chwtemp','conwtemp','cap','eirtemp','eirplr')

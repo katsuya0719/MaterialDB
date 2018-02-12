@@ -50,7 +50,7 @@ class Chiller(BasicInfo):
 
 class CapacityFunction(models.Model):
 	#chiller=models.ForeignKey(Chiller,related_name='cap')
-	chiller = models.OneToOneField(Chiller, primary_key=True, on_delete=models.CASCADE)
+	chiller = models.OneToOneField(Chiller, primary_key=True, on_delete=models.CASCADE,related_name='cap')
 	name=models.CharField(max_length=100, blank = True)
 	c1=models.FloatField()
 	c2=models.FloatField()
@@ -68,7 +68,7 @@ class CapacityFunction(models.Model):
 
 class EIRofTemp(models.Model):
 	#chiller = models.ForeignKey(Chiller, related_name='eirtemp')
-	chiller = models.OneToOneField(Chiller, primary_key=True, on_delete=models.CASCADE)
+	chiller = models.OneToOneField(Chiller, primary_key=True, on_delete=models.CASCADE,related_name='eirtemp')
 	name = models.CharField(max_length=100, blank=True)
 	c1 = models.FloatField()
 	c2 = models.FloatField()
@@ -86,7 +86,7 @@ class EIRofTemp(models.Model):
 
 class EIRofPLR(models.Model):
 	#chiller = models.ForeignKey(Chiller,related_name='eirplr')
-	chiller = models.OneToOneField(Chiller, primary_key=True, on_delete=models.CASCADE)
+	chiller = models.OneToOneField(Chiller, primary_key=True, on_delete=models.CASCADE,related_name='eirplr')
 	name = models.CharField(max_length=100, blank=True)
 	c1=models.FloatField()
 	c2= models.FloatField()
