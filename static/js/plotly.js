@@ -1,6 +1,6 @@
 function plotly(){
     var endpoint = '/hvac/api/chart/data'
-    var copData = capacityData = []
+    var copData = capacityData = idData = []
     $.ajax({
         method: "GET",
         url: endpoint,
@@ -9,7 +9,8 @@ function plotly(){
                 return ele/1000;
             });
             copData = data.cop;
-            console.log(copData);
+            idData = data.id;
+            //console.log(idData);
             scatterChart()
             //transcriptChart()
         // console.log(data)
@@ -21,11 +22,12 @@ function plotly(){
     })
 
     function scatterChart(){
+        d3=Plotly.d3;
         var data = [{
             x: capacityData,
             y: copData,
             type: 'scatter',
-            name: 'chiller',
+            name: idData,
             mode: 'markers',
             marker: { size: 8 }
         }];
@@ -54,6 +56,33 @@ function plotly(){
         };
 
         Plotly.newPlot('scatter', data, layout);
+
+        var plot=document.getElementById('scatter');
+        var hoverInfo=document.getElementById('hoverInfo');
+
+        //add callback
+        /*
+        plot.on('plotly_click', function(data){
+            var pts = '';
+            for(var i=0; i < data.points.length; i++){
+
+                pts = 'x = '+data.points[i].x +'\ny = '+
+                    data.points[i].y.toPrecision(4) + '\nid='+idData[i]+'\n\n';
+            }
+            alert('Closest point clicked:\n\n'+pts);
+        });
+        */
+        plot.on('plotly_hover', function(data){
+            var infotext = data.points.map(function(d){
+                console.log(d);
+              return (d.data.name[d.pointIndex]+'/Capacity= '+d.x+'kW, COP= '+d.y.toPrecision(3));
+            });
+            console.log(infotext)
+            hoverInfo.innerHTML = infotext.join('');
+        })
+         .on('plotly_unhover', function(data){
+            hoverInfo.innerHTML = '';
+        });
     }
 
     function articleChart(){
