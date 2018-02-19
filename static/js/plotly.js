@@ -84,9 +84,8 @@ function scatter3d(url){
         url: url,
         success: function(data){
             console.log(data);
-            //X = np.arange(xr[0], xr[1], gsize)
             //capacity function
-            var cap=biquadratic(data.cap)
+            var cap=biquadratic(data.cap,data.capacity)
             //var eirplr=biquadratic(data.eirplr)
             render(cap,'cap','Cooling Capacity Function')
             //copData = data.cop;
@@ -97,7 +96,7 @@ function scatter3d(url){
         },
     })
 
-    function biquadratic(d){
+    function biquadratic(d,coef){
         console.log(d)
         var X=_.range(Math.floor(d.min_x), Math.ceil(d.max_x), 1);
         var Y=_.range(Math.floor(d.min_y), Math.ceil(d.max_y), 1);
@@ -111,11 +110,15 @@ function scatter3d(url){
                 xList.push(x)
                 yList.push(y)
                 var z=d.c1+d.c2*x+d.c3*Math.pow(x,2)+d.c4*y+d.c5*Math.pow(y,2)+d.c6*x*y
-                console.log(z)
                 zList.push(z)
             })
         })
-        return [xList,yList,zList]
+
+        var zList2=zList.map(function(val){
+            return val*coef/1000
+        })
+
+        return [xList,yList,zList2]
     }
 
     function render(data,id,title){
@@ -124,11 +127,14 @@ function scatter3d(url){
         console.log(zmax)
         var trace1 = {
             x:data[0], y: data[1], z: data[2],
+            /*
             colorscale: [
               [0, 'rgb(255, 0, 0)'],
               [zmax/2, 'rgb(0, 255, 0)'],
               [zmax, 'rgb(0, 0, 255)']
             ],
+            */
+            //colorscale: 'YIOrRd',
             type: 'mesh3d'
         };
 
@@ -140,9 +146,35 @@ function scatter3d(url){
             b: 0,
             t: 0
           },
-          title:title
+          title:title,
+          showlegend:true,
+          xaxis:{
+            title:"chilled water leaving temperature[C]",
+            titlefont: {
+                size: 18,
+                color: '#7f7f7f'
+            }
+          },
+          yaxis:{
+            title:"condensing fluid entering temperature[C]",
+            titlefont: {
+                size: 18,
+                color: '#7f7f7f'
+            }
+          }
         };
         Plotly.newPlot(id, data, layout);
+
+        var plot=document.getElementById(id);
+
+        plot.on('plotly_click', function(data){
+            var url = data.points.map(function(d){
+                console.log(d);
+                //return '/hvac/api/'+d.data.name[d.pointIndex]
+            })
+            //scatter3d(url)
+        });
+
     };
 
     
