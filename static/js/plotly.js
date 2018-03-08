@@ -87,7 +87,8 @@ function scatter3d(url){
             //capacity function
             var cap=biquadratic(data.cap,data.capacity)
             //var eirplr=biquadratic(data.eirplr)
-            render(cap,'cap','Cooling Capacity Function')
+            var meta=[data.eirtemp,data.eirplr,data.cop]
+            render(cap,'cap','Cooling Capacity Function',meta)
             //copData = data.cop;
         },
         error: function(error_data){
@@ -106,7 +107,6 @@ function scatter3d(url){
 
         X.forEach(function(x){
             Y.forEach(function(y){
-                console.log(x,y)
                 xList.push(x)
                 yList.push(y)
                 var z=d.c1+d.c2*x+d.c3*Math.pow(x,2)+d.c4*y+d.c5*Math.pow(y,2)+d.c6*x*y
@@ -121,7 +121,7 @@ function scatter3d(url){
         return [xList,yList,zList2]
     }
 
-    function render(data,id,title){
+    function render(data,id,title,meta){
         console.log(data[2])
         var zmax=Math.max.apply(null,data[2]).toFixed(1)
         console.log(zmax)
@@ -135,7 +135,8 @@ function scatter3d(url){
             ],
             */
             //colorscale: 'YIOrRd',
-            type: 'mesh3d'
+            type: 'mesh3d',
+            customdata: meta
         };
 
         var data = [trace1];
