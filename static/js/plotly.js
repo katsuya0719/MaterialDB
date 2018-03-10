@@ -72,10 +72,54 @@ function plotly(){
             var url = data.points.map(function(d){
                 return '/hvac/api/'+d.data.name[d.pointIndex]
             })
-            scatter3d(url)
+            //scatter3d(url)
+            line(url)
         });
     }
 }
+
+function line(url){
+    $.ajax({
+        method: "GET",
+        url: url,
+        success: function(data){
+            console.log(data);
+            //capacity function
+            var temp=calcBiquadratic(data)
+            var conwt=temp[0]
+            var capList=temp[1]
+            var eirList=temp[2]
+            calcQuadratic(data)
+            //render(cap,'cap','Cooling Capacity Function',meta)
+        },
+        error: function(error_data){
+            console.log("error")
+            console.log(error_data)
+        },
+    })
+
+    function calcBiquadratic(d){
+        console.log(d);
+        var x=7;
+        var Y=_.range(Math.floor(d.cap.min_y), Math.ceil(d.cap.max_y), 1);
+        var capList=[]
+        var eirList=[]
+        Y.forEach(function(y){
+            var capCoef=(d.cap.c1+d.cap.c2*x+d.cap.c3*Math.pow(x,2)+d.cap.c4*y+d.cap.c5*Math.pow(y,2)+d.cap.c6*x*y)
+            var eirCoef=(d.eirtemp.c1+d.eirtemp.c2*x+d.eirtemp.c3*Math.pow(x,2)+d.eirtemp.c4*y+d.eirtemp.c5*Math.pow(y,2)+d.eirtemp.c6*x*y)
+
+            capList.push(capCoef)
+            eirList.push(eirCoef)
+        })
+        return [Y,capList,eirList]
+    }
+
+    function calcQuadratic(d){
+        console.log(d)
+        var X=_.range(Math.floor(d.cap.min_y), Math.ceil(d.cap.max_y), 1);
+    }
+}
+
 
 function scatter3d(url){
     console.log("3d")
