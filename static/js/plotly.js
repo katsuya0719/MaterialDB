@@ -170,7 +170,10 @@ function scatter3d(url){
 
         plot.on('plotly_click', function(data){
             var url = data.points.map(function(d){
-                console.log(d);
+                //console.log(d);
+                var eirtemp=d.data.customdata[0]
+                var eirplr=d.data.customdata[1]
+                console.log(eirtemp)
                 //return '/hvac/api/'+d.data.name[d.pointIndex]
             })
             //scatter3d(url)
