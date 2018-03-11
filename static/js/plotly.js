@@ -83,7 +83,6 @@ function line(url){
         method: "GET",
         url: url,
         success: function(data){
-            console.log(data);
             //capacity function
             var temp=calcBiquadratic(data)
             var conwt=temp[0]
@@ -99,7 +98,7 @@ function line(url){
     })
 
     function calcBiquadratic(d){
-        console.log(d);
+        //console.log(d);
         var x=7;
         var Y=_.range(Math.floor(d.cap.min_y), Math.ceil(d.cap.max_y), 1);
         var capList=[]

@@ -183,5 +183,6 @@ def parse(idf):
         for q in quadratic:
             print (q[0])
             if q[0]==eirofplr:
-                ep_db=EIRofPLR(chiller=chiller_db,name=b[0],c1=b[1],c2=b[2],c3=b[3],min_x=b[4],max_x=b[5])
+                print (q[0],eirofplr)
+                ep_db=EIRofPLR(chiller=chiller_db,name=q[0],c1=q[1],c2=q[2],c3=q[3],min_x=q[4],max_x=q[5])
                 ep_db.save()
