@@ -107,12 +107,23 @@ function line(url,id){
             var temp={
                 x:x,
                 y:y[key],
-                type:'scatter'
+                type:'scatter',
+                name:key
             }
             data.push(temp);
         })
-        console.log(data);
-        Plotly.newPlot(id,data)
+        
+        var layout={
+            title:"COP against Part Load Ratio at different condenser temperature",
+            xaxis:{
+                title:'Part Load Ratio'
+            },
+            yaxis:{
+                title:'COP'
+            }
+        }
+
+        Plotly.newPlot(id,data,layout);
     }
 
     function preprocess(data){
@@ -138,7 +149,7 @@ function line(url,id){
                 var cop2=capacity*capList[i]*plrRange[j]/power
                 //console.log(conwt[i],plrRange[j],eirList[i],plrList[j],cop2,power)
                //plrObj[plrRange[j]]=cop2
-               copList.push(cop2)
+               copList.push(cop2.toFixed(2))
             }
             results[conwt[i]]=copList;
         }
