@@ -73,28 +73,24 @@ function plotly(){
                 return '/hvac/api/'+d.data.name[d.pointIndex]
             })
             //scatter3d(url)
-            line(url)
+            line(url,"plr")
         });
     }
 }
 
-function line(url){
+function line(url,id){
     $.ajax({
         method: "GET",
         url: url,
         success: function(data){
             //pre process
-            var temp1=calcBiquadratic(data)
-            var conwt=temp1[0]
-            var capList=temp1[1]
-            var eirList=temp1[2]
-            var temp2=calcQuadratic(data)
-            var plr=temp2[0]
-            var plrList=temp2[1]
-            var capacity=data.capacity
-            var cop=data.cop
+            var temp=preprocess(data)
+            var x=temp[0]
+            var y=temp[1]
+            console.log(x,y)
+            
             //render using the processed data
-            render(plr,plrList,capList,eirList,conwt,capacity,cop)
+            render(x,y,id)
             //render(cap,'cap','Cooling Capacity Function',meta)
         },
         error: function(error_data){
@@ -103,19 +99,50 @@ function line(url){
         },
     })
 
-    function render(plrRange,plrList,capList,eirList,conwt,capacity,cop){
-        //console.log(conwt.length)
-        //console.log(capList.length)
+    function render(x,y,id){
+        var data=[];
+        Object.keys(y).forEach(function(key){
+            console.log(key)
+            console.log(y[key])
+            var temp={
+                x:x,
+                y:y[key],
+                type:'scatter'
+            }
+            data.push(temp);
+        })
+        console.log(data);
+        Plotly.newPlot(id,data)
+    }
+
+    function preprocess(data){
+
+        var temp1=calcBiquadratic(data)
+        var conwt=temp1[0]
+        var capList=temp1[1]
+        var eirList=temp1[2]
+        var temp2=calcQuadratic(data)
+        var plrRange=temp2[0]
+        var plrList=temp2[1]
+        var capacity=data.capacity
+        var cop=data.cop
+
         results={}
         for(var i=0;i<conwt.length;i++){
-            plrObj={}
-            plrList.forEach(function(plr){
-                var power=plr*capacity/cop*capList[i]*eirList[i]
-                var eir=plr/cop*eirList[i]
-                var cop2=1/eir
-                console.log(conwt[i],plr,cop2)
-            })
+            //plrObj={}
+            copList=[]
+            for(var j=0;j<plrList.length;j++){
+                var power=plrList[j]*capacity/cop*capList[i]*eirList[i]
+                //var eir=plrList[j]/cop*eirList[i]
+                //var cop2=1/eir
+                var cop2=capacity*capList[i]*plrRange[j]/power
+                //console.log(conwt[i],plrRange[j],eirList[i],plrList[j],cop2,power)
+               //plrObj[plrRange[j]]=cop2
+               copList.push(cop2)
+            }
+            results[conwt[i]]=copList;
         }
+        return [plrRange,results]
 
     }
 
@@ -137,11 +164,11 @@ function line(url){
 
     function calcQuadratic(d){
         console.log(d)
-        var X=_.range(Math.floor(d.eirplr.min_x), Math.ceil(d.eirplr.max_x), 1);
+        var X=_.range(Math.floor(d.eirplr.min_x*10)/10, Math.ceil(d.eirplr.max_x*10)/10, 0.1);
         var plrList=[];
         X.forEach(function(x){
-            var plrCoef=(d.eirplr.c1+d.eirplr.c2+d.eirplr.c3)
-
+            var plrCoef=(d.eirplr.c1+d.eirplr.c2*x+d.eirplr.c3*Math.pow(x,2))
+            //console.log(x,plrCoef)
             plrList.push(plrCoef)
         })
         return [X,plrList]
