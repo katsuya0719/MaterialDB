@@ -83,12 +83,18 @@ function line(url){
         method: "GET",
         url: url,
         success: function(data){
-            //capacity function
-            var temp=calcBiquadratic(data)
-            var conwt=temp[0]
-            var capList=temp[1]
-            var eirList=temp[2]
-            calcQuadratic(data)
+            //pre process
+            var temp1=calcBiquadratic(data)
+            var conwt=temp1[0]
+            var capList=temp1[1]
+            var eirList=temp1[2]
+            var temp2=calcQuadratic(data)
+            var plr=temp2[0]
+            var plrList=temp2[1]
+            var capacity=data.capacity
+            var cop=data.cop
+            //render using the processed data
+            render(plr,plrList,capList,eirList,conwt,capacity,cop)
             //render(cap,'cap','Cooling Capacity Function',meta)
         },
         error: function(error_data){
@@ -96,6 +102,22 @@ function line(url){
             console.log(error_data)
         },
     })
+
+    function render(plrRange,plrList,capList,eirList,conwt,capacity,cop){
+        //console.log(conwt.length)
+        //console.log(capList.length)
+        results={}
+        for(var i=0;i<conwt.length;i++){
+            plrObj={}
+            plrList.forEach(function(plr){
+                var power=plr*capacity/cop*capList[i]*eirList[i]
+                var eir=plr/cop*eirList[i]
+                var cop2=1/eir
+                console.log(conwt[i],plr,cop2)
+            })
+        }
+
+    }
 
     function calcBiquadratic(d){
         //console.log(d);
@@ -115,7 +137,14 @@ function line(url){
 
     function calcQuadratic(d){
         console.log(d)
-        var X=_.range(Math.floor(d.cap.min_y), Math.ceil(d.cap.max_y), 1);
+        var X=_.range(Math.floor(d.eirplr.min_x), Math.ceil(d.eirplr.max_x), 1);
+        var plrList=[];
+        X.forEach(function(x){
+            var plrCoef=(d.eirplr.c1+d.eirplr.c2+d.eirplr.c3)
+
+            plrList.push(plrCoef)
+        })
+        return [X,plrList]
     }
 }
 
