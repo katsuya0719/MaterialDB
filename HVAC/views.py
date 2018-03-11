@@ -164,7 +164,7 @@ def parse(idf):
     biquadratic = parsed.readattrs(1, attrbiquad)
     quadratic = parsed.readattrs(2, attrquad)
     for c in chillers:
-        print (c[0])
+        #print (c[0])
 
         chiller_db=Chiller(title=c[0],capacity=int(c[1]),cop=float(c[2]),chwtemp=float(c[3]),conwtemp=float(c[4]),chwfr=float(c[5]),conwfr=float(c[6]),minplr=float(c[10]),maxplr=float(c[11]),optimumplr=float(c[12]),minunloadratio=float(c[13]),condenser=c[14],flowmode=c[15])
         chiller_db.save()
@@ -172,7 +172,7 @@ def parse(idf):
         eiroftemp=c[8]
         eirofplr=c[9]
         for b in biquadratic:
-            print (b[0])
+            #print (b[0])
             if b[0]==capfunc:
                 cf_db=CapacityFunction(chiller=chiller_db,name=b[0],c1=b[1],c2=b[2],c3=b[3],c4=b[4],c5=b[5],c6=b[6],min_x=b[7],max_x=b[8],min_y=b[9],max_y=b[10])
                 cf_db.save()
