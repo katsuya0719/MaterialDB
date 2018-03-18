@@ -76,11 +76,12 @@ class ChillerList(ListView):
     template_name = 'hvac/chiller_list.html'
     context_object_name = 'chiller_list'
     model = Chiller
-"""
+
 class ChillerDetail(DetailView):
     template_name = 'hvac/chiller_detail.html'
     model = Chiller
 
+"""
     def plot_capfunc(self,context):
         temp=context['object'].capacityfunction
         print (temp)

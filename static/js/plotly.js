@@ -44,7 +44,7 @@ function plotly(){
                 }
               },
               yaxis: {
-                title: 'COP []',
+                title: 'Reference COP []',
                 titlefont: {
                   size: 18,
                   color: '#7f7f7f'
