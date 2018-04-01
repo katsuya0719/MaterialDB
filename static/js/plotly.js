@@ -72,6 +72,7 @@ function plotly(){
             var url = data.points.map(function(d){
                 return '/hvac/api/'+d.data.name[d.pointIndex]
             })
+            console.log(url)
             //scatter3d(url)
             line(url,"plr")
         });
@@ -84,6 +85,7 @@ function line(url,id){
         url: url,
         success: function(data){
             //pre process
+            console.log(data)
             var temp=preprocess(data)
             var x=temp[0]
             var y=temp[1]
@@ -158,7 +160,7 @@ function line(url,id){
     }
 
     function calcBiquadratic(d){
-        //console.log(d);
+        console.log(d);
         var x=7;
         var Y=_.range(Math.floor(d.cap.min_y), Math.ceil(d.cap.max_y), 1);
         var capList=[]

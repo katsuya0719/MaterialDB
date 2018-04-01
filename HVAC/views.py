@@ -19,11 +19,13 @@ from rest_framework.response import Response
 from .serializer import ChillerSerializer,CapSerializer,EIRTSerializer,PLRSerializer
 # Create your views here.
 
+def upload
+
 def Graph(request):
     if request.method == "GET":
         return render_to_response('hvac/graph.html')
 
-class ChillerDetail(APIView):
+class ChillerData(APIView):
     def get_object(self,pk):
         try:
             return Chiller.objects.get(pk=pk)
@@ -72,6 +74,8 @@ class ChartData(APIView):
 
         return Response(data)
 
+
+
 class ChillerList(ListView):
     template_name = 'hvac/chiller_list.html'
     context_object_name = 'chiller_list'
@@ -112,6 +116,10 @@ class ChillerDetail(DetailView):
         return context
 
 """
+
+class uploadView(TemplateView):
+    template_name = "hvac/upload.html"
+
 
 def heatmap(request):
     if request.method == "GET":
