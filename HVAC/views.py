@@ -24,7 +24,7 @@ from .forms import CapInline,EIRInline,PLRInline
 
 class ChillerCreate(CreateView):
     model=Chiller
-    fields = ['capacity', 'cop', 'chwtemp', 'conwtemp', 'condenser', 'flowmode', 'chwfr', 'conwfr', 'minplr', 'maxplr','optimumplr', 'minunloadratio']
+    fields = ['title','manufacturer','capacity', 'cop', 'cost','chwtemp', 'conwtemp', 'condenser', 'flowmode', 'chwfr', 'conwfr', 'minplr', 'maxplr','optimumplr', 'minunloadratio','url']
     success_url=reverse_lazy('hvac:list')
     template_name = 'hvac/chiller_create.html'
 
