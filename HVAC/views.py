@@ -1,6 +1,8 @@
 from django.shortcuts import render,render_to_response
+from django.urls import reverse_lazy
 from django.http import HttpResponse,Http404
-from django.views.generic import ListView,DetailView,TemplateView
+from django.db import transaction
+from django.views.generic import ListView,DetailView,TemplateView,CreateView
 from .models import Chiller,CapacityFunction,EIRofTemp,EIRofPLR
 from libs.EPprocessing import chiller
 from libs.EPprocessing.parseidf import parseIDF
@@ -17,9 +19,47 @@ import plotly.graph_objs as go
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializer import ChillerSerializer,CapSerializer,EIRTSerializer,PLRSerializer
+from .forms import CapInline,EIRInline,PLRInline
 # Create your views here.
 
-def upload
+class ChillerCreate(CreateView):
+    model=Chiller
+    fields = ['capacity', 'cop', 'chwtemp', 'conwtemp', 'condenser', 'flowmode', 'chwfr', 'conwfr', 'minplr', 'maxplr','optimumplr', 'minunloadratio']
+    success_url=reverse_lazy('hvac:list')
+    template_name = 'hvac/chiller_create.html'
+
+    def get_context_data(self, **kwargs):
+        data=super().get_context_data(**kwargs)
+        if self.request.POST:
+            data['capfunc']=CapInline(self.request.POST)
+            data['eirfunc'] = EIRInline(self.request.POST)
+            data['plrfunc'] = PLRInline(self.request.POST)
+        else:
+            data['capfunc'] = CapInline()
+            data['eirfunc'] = EIRInline()
+            data['plrfunc'] = PLRInline()
+
+        print (data)
+        return data
+
+    def form_valid(self,form):
+        context=self.get_context_data()
+        print (context)
+        capfunc=context['capfunc']
+        eirfunc=context['eirfunc']
+        plrfunc = context['plrfunc']
+        with transaction.atomic():
+            self.object=form.save()
+            if capfunc.is_valid():
+                capfunc.instance=self.object
+                capfunc.save()
+            if eirfunc.is_valid():
+                eirfunc.instance=self.object
+                eirfunc.save()
+            if plrfunc.is_valid():
+                plrfunc.instance=self.object
+                plrfunc.save()
+        return super().form_valid(form)
 
 def Graph(request):
     if request.method == "GET":

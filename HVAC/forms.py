@@ -1,13 +1,15 @@
 from django import forms
 from .models import Chiller,CapacityFunction,EIRofTemp,EIRofPLR
 from django.forms import widgets
+from django.forms import inlineformset_factory
 
 class ChillerForm(forms.ModelForm):
 
 	class Meta:
 		model=Chiller
-		fields=['capacity','cop','chwtemp','conwtemp','condenser','flowmode','chwfr','conwfr','minplr','maxplr','optimumplr','minunloadratio']
+		#fields=['capacity','cop','chwtemp','conwtemp','condenser','flowmode','chwfr','conwfr','minplr','maxplr','optimumplr','minunloadratio']
 		#widgets={'ecms':forms.CheckboxSelectMultiple}
+		exclude=()
 
 class CapFuncForm(forms.ModelForm):
 
@@ -26,3 +28,7 @@ class PLRFuncForm(forms.ModelForm):
 	class Meta:
 		model=EIRofPLR
 		fields=['c1','c2','c3','c4','min_x','max_x']
+
+CapInline=inlineformset_factory(Chiller,CapacityFunction,form=CapFuncForm)
+EIRInline=inlineformset_factory(Chiller,EIRofTemp,form=EIRFuncForm)
+PLRInline=inlineformset_factory(Chiller,EIRofPLR,form=PLRFuncForm)
