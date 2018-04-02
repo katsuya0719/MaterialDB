@@ -1,6 +1,11 @@
-<div class="col-md-4">
+{% extends "base.html" %}
+{% block content %}
+{% load staticfiles %}
+<h1>Input Chiller Performance Information</h1>
+<div class="col-md-12">
 	<form action="" method="post">{% csrf_token %}
 	{{ form.as_p }}
+	<h3>Capacity Function of Temperature</h3>
 		<table class="table"> 
 		{{ capfunc.management_form }}
 		{% for form in capfunc.forms %}
@@ -29,6 +34,63 @@
 			</tr>
 		{% endfor %}
 		</table>
+	<h3>EIR Function of Temperature</h3>
+		<table class="table"> 
+		{{ eirfunc.management_form }}
+		{% for form in eirfunc.forms %}
+			{% if forloop.first %}
+				<thead>
+				<tr>
+					{% for field in form.visible_fields %}
+						<th>{{ field.label|capfirst }}</th>
+					{% endfor %}
+				</tr>
+				</thead>
+			{% endif %}
+			<tr class="{% cycle 'row1' 'row2' %} formset_row">
+				{% for field in form.visible_fields %}
+					<td> 
+						{% if forloop.first %}
+							{% for hidden in form.hidden_fields %}
+								{{ hidden }}
+							{% endfor %}
+						{% endif %}
+						{{ field.errors.as_ul }}
+						{{ field }}
+					</td>
+				{% endfor %}
+			</tr>
+		{% endfor %}
+		</table>
+	<h3>EIR Function of Part Load Ratio</h3>
+		<table class="table"> 
+		{{ plrfunc.management_form }}
+		{% for form in plrfunc.forms %}
+			{% if forloop.first %}
+				<thead>
+				<tr>
+					{% for field in form.visible_fields %}
+						<th>{{ field.label|capfirst }}</th>
+					{% endfor %}
+				</tr>
+				</thead>
+			{% endif %}
+			<tr class="{% cycle 'row1' 'row2' %} formset_row">
+				{% for field in form.visible_fields %}
+					<td> 
+						{% if forloop.first %}
+							{% for hidden in form.hidden_fields %}
+								{{ hidden }}
+							{% endfor %}
+						{% endif %}
+						{{ field.errors.as_ul }}
+						{{ field }}
+					</td>
+				{% endfor %}
+			</tr>
+		{% endfor %}
+		</table>
 		<input type="submit" value="Save"/> <a href="{% url 'hvac:create' %}">back to the list</a>
 	</form>
 </div>
+{% endblock %}
