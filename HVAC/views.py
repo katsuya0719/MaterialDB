@@ -10,8 +10,8 @@ from django.core.files.storage import FileSystemStorage
 from django.core.files.images import ImageFile
 from io import BytesIO
 import matplotlib as mpl
-from bokeh.plotting import figure, output_file, show
-from bokeh.embed import components
+#from bokeh.plotting import figure, output_file, show
+#from bokeh.embed import components
 import plotly
 plotly.tools.set_credentials_file(username='obakatsu', api_key='nK5JWwdD7LGUH5lx1wkz')
 import plotly.offline as opy

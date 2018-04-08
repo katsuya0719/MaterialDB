@@ -5,7 +5,7 @@ from django.db import models
 # Create your models here.
 class BasicInfo(models.Model):
 	title = models.CharField(max_length=100)
-	manufacturer = models.CharField(max_length=50, blank = True)
+	manufacturer = models.CharField(max_length=50, null=True,blank = True)
 	used_project = models.CharField(max_length=50, null=True,blank=True)
 	cost=models.IntegerField(null = True, blank = True)
 	url=models.URLField(null=True,blank=True)
